@@ -1,10 +1,14 @@
+
 """
 Load the saved model + scaler once, then predict RUL for a single engine's
 sensor history. This is the same code path the Streamlit app uses, so a
 prediction made in the app matches a prediction made from the CLI exactly.
 """
 
+import base64
+import io
 import json
+from pathlib import Path
 
 import joblib
 import pandas as pd
@@ -15,10 +19,26 @@ from features import _window_stats
 MODELS_DIR = "../models"
 
 
+def _joblib_load(path: str):
+    """Load a joblib file, or decode an adjacent .b64 sidecar if the binary is missing.
+
+    GitHub MCP text tools cannot upload true binary blobs; the P1 ship path may
+    therefore place `*.joblib.b64` (ASCII base64) next to where the binary would be.
+    """
+    p = Path(path)
+    if p.is_file():
+        return joblib.load(p)
+    b64_path = Path(str(p) + ".b64")
+    if b64_path.is_file():
+        raw = base64.b64decode(b64_path.read_text().encode("ascii"))
+        return joblib.load(io.BytesIO(raw))
+    raise FileNotFoundError(f"Missing {p} and {b64_path}")
+
+
 class RULPredictor:
     def __init__(self, models_dir: str = MODELS_DIR):
-        self.model = joblib.load(f"{models_dir}/xgb_model.joblib")
-        self.scaler = joblib.load(f"{models_dir}/scaler.joblib")
+        self.model = _joblib_load(f"{models_dir}/xgb_model.joblib")
+        self.scaler = _joblib_load(f"{models_dir}/scaler.joblib")
         with open(f"{models_dir}/feature_names.json") as f:
             self.feature_names = json.load(f)
 
