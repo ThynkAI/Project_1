@@ -1,0 +1,13 @@
+# Pinned to exactly what this project was built and tested against.
+# The saved model/scaler (models/*.joblib) were pickled with these versions --
+# loading them with a materially different scikit-learn/xgboost on a deploy
+# host can throw version-mismatch warnings or, in the worst case, fail to
+# load. If you deploy and hit that, retrain with train.py on the deploy
+# host's installed versions rather than relying on the shipped .joblib files.
+pandas==3.0.2
+numpy==2.4.4
+scikit-learn==1.9.0
+xgboost==3.4.1
+joblib==1.5.3
+streamlit==1.63.0
+matplotlib==3.10.8
