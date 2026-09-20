@@ -38,7 +38,14 @@ def load_sample_engines():
         true_rul = json.load(f)
     engines = {}
     for unit_str, rul in true_rul.items():
-        df = pd.read_csv(SAMPLE_DIR / f"engine_{unit_str}.csv")
+        csv_path = SAMPLE_DIR / f"engine_{unit_str}.csv"
+        if csv_path.exists():
+            df = pd.read_csv(csv_path)
+        else:
+            # Fallback: zlib+base64 sidecar when binary/large CSV upload is blocked
+            import base64, zlib, io
+            z64_path = SAMPLE_DIR / f"engine_{unit_str}.csv.z64"
+            df = pd.read_csv(io.BytesIO(zlib.decompress(base64.b64decode(z64_path.read_text()))))
         engines[int(unit_str)] = {"df": df, "true_rul": rul}
     return engines
 
