@@ -186,15 +186,15 @@ leaderboard. With that caveat, our number sits alongside:
 | **This project** | **XGBoost, W=30** | **14.31** | **300.1** |
 | Zheng et al. (2017) | LSTM | 16.14 | 338 |
 | Li, Ding & Sun (2018) | DCNN + window | see their Table 4 | see their Table 4 |
-| Alomari et al. | RF/XGBoost/NGBoost ensemble | 11.8 | — |
-| Ahmed (2025) | Attention-LSTM + XGBoost | see paper (FD001) | — |
-| IMSA (2025) | LSTM vs. XGBoost vs. Chronos | LSTM 14.32 (best of three) | — |
 
-Our XGBoost beats the Zheng et al. (2017) LSTM baseline on both metrics and
-lands close to the IMSA (2025) LSTM number, but is still behind the Alomari
-et al. tree ensemble — a reasonable place for a first window-statistics +
-XGBoost pass to land, and consistent with the "low-teens to mid-20s" sanity
-band rather than an outlier in either direction.
+Our XGBoost beats the Zheng et al. (2017) LSTM baseline on both metrics on
+the same public FD001 last-window protocol, and sits in the "low-teens to
+mid-20s" sanity band for a first window-statistics + XGBoost pass.
+
+> **Footnote:** Other published ensembles (e.g. Alomari et al.; Ahmed 2025;
+> IMSA 2025) are not listed as side-by-side rows here — we have not re-verified
+> their protocols on our FD001 last-window setup, so they are not claimed as
+> comparable results.
 
 ### What the two metrics mean
 
@@ -291,9 +291,3 @@ and Health Management, 5(2). doi.org/10.36001/ijphm.2014.v5i2.2236
 - Li, X., Ding, Q., & Sun, J.-Q. (2018). *Remaining Useful Life Estimation in
   Prognostics Using Deep Convolution Neural Networks.* Reliability Engineering
   & System Safety, 172, 1–11. doi.org/10.1016/j.ress.2017.11.021
-- Alomari, Y., et al. *RF + XGBoost + NGBoost Ensemble for RUL Estimation on
-  C-MAPSS.*
-- Ahmed, S. (2025). *Attention-LSTM + XGBoost Hybrid for RUL Estimation.*
-  MATEC Web of Conferences.
-- IMSA (2025). *From LSTM to Chronos: A Comparison for RUL Estimation on
-  FD001.* ieeexplore.ieee.org/document/11167842
