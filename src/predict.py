@@ -32,7 +32,13 @@ def _joblib_load(path: str):
     if b64_path.is_file():
         raw = base64.b64decode(b64_path.read_text().encode("ascii"))
         return joblib.load(io.BytesIO(raw))
-    raise FileNotFoundError(f"Missing {p} and {b64_path}")
+    # Multi-part sidecars: name.joblib.b64.part00, part01, ...
+    parts = sorted(p.parent.glob(p.name + ".b64.part*"))
+    if parts:
+        joined = "".join(part.read_text().strip() for part in parts)
+        raw = base64.b64decode(joined.encode("ascii"))
+        return joblib.load(io.BytesIO(raw))
+    raise FileNotFoundError(f"Missing {p}, {b64_path}, and part sidecars")
 
 
 class RULPredictor:
